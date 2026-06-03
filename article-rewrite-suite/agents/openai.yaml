@@ -1,0 +1,4 @@
+interface:
+  display_name: "Article Rewrite Suite"
+  short_description: "Long-form translation and rewriting"
+  default_prompt: "Use $article-rewrite-suite to translate, rewrite, or imitate my manuscript while preserving structure and producing high-quality new drafts."
