@@ -33,10 +33,21 @@ When producing multiple drafts:
 
 If the input is too large for one response:
 
-- Ask the user to send the manuscript in numbered parts.
+- Prefer script-assisted chunking when the source exists as a file: run `scripts/prepare_rewrite_job.py`.
+- Ask the user to send the manuscript in numbered parts when no local file is available.
 - Do not begin final full-draft generation until enough structure is known, unless the user asks to process as they paste.
 - After each part, return the rewritten part and a compact continuity note.
 - At the end, offer a whole-article consistency pass.
+
+## Lower-Capability Models
+
+When the active model struggles:
+
+- Keep prompts short and use only one chunk at a time.
+- Reduce chunk size to 800-1,200 Chinese characters if generation stalls.
+- Avoid asking for multiple versions in one pass.
+- Ask for faithful polish first, then run a second pass for deeper rewriting.
+- Use `scripts/assemble_rewrite.py` to merge finished chunks instead of asking the model to hold all chunks in context.
 
 ## Continuity Checks
 

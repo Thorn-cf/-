@@ -13,6 +13,8 @@ Always produce original expression. Do not copy distinctive sentences, unusual m
 
 Default to a three-stage system: distill the structure, rebuild the expression, then run quality and similarity-risk checks. For "洗稿" and "仿写", work from the distilled outline and paragraph functions instead of rewriting sentence by sentence.
 
+For long manuscripts or lower-capability models, reduce prompt load aggressively: run deterministic scripts to split the manuscript and generate short per-chunk prompts, then rewrite one chunk at a time.
+
 ## Intake
 
 Before writing, identify:
@@ -47,6 +49,22 @@ When generating multiple versions, label only the version names needed for selec
 
 For very long manuscripts, avoid flooding the user with a whole book-length answer at once. Offer a batch plan, then process in chunks while maintaining a shared outline and version log.
 
+## Low-Capacity Model Support
+
+Use [references/low-capacity-model-workflow.md](references/low-capacity-model-workflow.md) when the model is likely to struggle with long prompts, the manuscript is long, or earlier attempts get stuck.
+
+Prefer script-assisted execution:
+
+```bash
+python3 article-rewrite-suite/scripts/prepare_rewrite_job.py input.md rewrite-job
+```
+
+This creates small chunks, per-chunk prompts, structure templates, stability-lock templates, and an assembly checklist. Rewrite each chunk independently, place finished chunks in `rewrite-job/rewritten/`, then assemble:
+
+```bash
+python3 article-rewrite-suite/scripts/assemble_rewrite.py rewrite-job/rewritten final.md
+```
+
 ## User Guidance
 
 When the user asks how to install, trigger, or use this skill, read and summarize [references/usage-guide.md](references/usage-guide.md). If the user has just installed the skill and asks what to do next, provide the guide directly in Chinese.
@@ -62,6 +80,8 @@ Use [references/modes.md](references/modes.md) when choosing or explaining rewri
 Use [references/rewriting-methods.md](references/rewriting-methods.md) for structure distillation, paragraph-function rewriting, fact locks, style fingerprints, multi-version differentiation, similarity-risk scanning, and repair loops.
 
 Use [references/long-form-workflow.md](references/long-form-workflow.md) when the source is long, multi-chapter, pasted in batches, or likely to exceed a single response.
+
+Use [references/low-capacity-model-workflow.md](references/low-capacity-model-workflow.md) when prompts must be shortened, generation gets stuck, or the agent should rely on scripts for chunking and assembly.
 
 Use [references/quality-rubric.md](references/quality-rubric.md) for final checks, especially when the user requires "质量不低于原文", "可发布", "多篇", or "结构不变".
 

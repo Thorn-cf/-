@@ -12,6 +12,7 @@ Use this guide when a user has installed the skill and needs onboarding, trigger
 - 仿写：提取原文结构和风格，用于同主题或新主题创作。
 - 多版本生成：同一篇原文生成多个不同表达策略的版本。
 - 长文处理：支持分批处理长稿，并维护术语、事实和结构一致性。
+- 低模型辅助：把长文拆成小任务包，让能力一般的模型也能分块稳定改写。
 
 ## How To Trigger It
 
@@ -65,6 +66,24 @@ The skill should also trigger implicitly when the user asks for:
 使用 $article-rewrite-suite 处理一篇长稿。我会分多次发送，请你维护结构、术语和观点一致性，每次只输出当前部分的可发布改写稿。
 ```
 
+### Low-Capacity Model Or Stuck Generation
+
+```text
+使用 $article-rewrite-suite 的低模型工作流，把这篇长稿拆成小分块和短提示词，方便逐段洗稿。
+```
+
+If working from files, run:
+
+```bash
+python3 article-rewrite-suite/scripts/prepare_rewrite_job.py input.md rewrite-job
+```
+
+Then rewrite files in `rewrite-job/prompts/` one by one, save outputs into `rewrite-job/rewritten/`, and assemble:
+
+```bash
+python3 article-rewrite-suite/scripts/assemble_rewrite.py rewrite-job/rewritten final.md
+```
+
 ## Default Delivery Behavior
 
 For article generation tasks, output only publication-ready article content by default:
@@ -100,4 +119,6 @@ For best results, ask users to provide:
 使用 $article-rewrite-suite 帮我洗一下这篇稿子，保留结构和观点，输出一篇可发布的新稿。
 
 我能做的事包括：翻译、洗稿、深度改写、仿写、多版本生成、长文分批处理和平台化改写。默认情况下，我会只输出可发布正文，不显示改写说明或质量检查；如果你想看结构分析和检查结果，可以单独要求。
+
+如果模型处理长文时卡住，可以让我启用低模型工作流：我会先把长文拆成小分块和短提示词，再逐段生成，最后合并成完整稿。
 ```
