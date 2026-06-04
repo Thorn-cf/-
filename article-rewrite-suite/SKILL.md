@@ -47,7 +47,15 @@ When generating multiple versions, label only the version names needed for selec
 
 For very long manuscripts, avoid flooding the user with a whole book-length answer at once. Offer a batch plan, then process in chunks while maintaining a shared outline and version log.
 
+## User Guidance
+
+When the user asks how to install, trigger, or use this skill, read and summarize [references/usage-guide.md](references/usage-guide.md). If the user has just installed the skill and asks what to do next, provide the guide directly in Chinese.
+
+Keep the user guidance separate from article generation. Do not include usage instructions inside rewritten article outputs.
+
 ## Mode Selection
+
+Use [references/usage-guide.md](references/usage-guide.md) when explaining what this skill can do, how to trigger it, and what prompts users can try after installation.
 
 Use [references/modes.md](references/modes.md) when choosing or explaining rewrite modes.
 
