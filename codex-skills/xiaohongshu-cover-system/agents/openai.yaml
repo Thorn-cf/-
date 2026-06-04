@@ -1,0 +1,4 @@
+interface:
+  display_name: "小红书多图封面系统"
+  short_description: "基于素材库和人设生成小红书多图封面，并可发布到万神殿。"
+  default_prompt: "基于我的素材库、人设和帖子内容，生成一组小红书多图封面，并在需要时上传发布到万神殿。"
