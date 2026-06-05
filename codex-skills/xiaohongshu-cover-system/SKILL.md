@@ -11,6 +11,19 @@ Use this skill to turn a post topic plus the user's persona and material library
 
 Do not copy a specific creator or copyrighted design one-to-one. Imitate Xiaohongshu-native patterns at the level of layout grammar, density, color rhythm, typography hierarchy, sticker/callout usage, and multi-image composition.
 
+## Model Compatibility
+
+This skill must work with both strong and weaker base models. When the model is uncertain, context is short, or the request is vague, use the deterministic fallback path in `references/model-compatibility.md` instead of improvising.
+
+Minimum successful behavior:
+
+- Always produce at least 4 carousel images unless the user requested a different count.
+- Always choose one named cover family from `references/cover-families.md`.
+- Always make image 1 the cover and images 2+ supporting gallery pages.
+- Always include exact on-image text for each image.
+- Always include asset usage, even if the answer says "no local asset provided; use placeholder/generate".
+- Always separate "design plan" from "Phanthy publishing action".
+
 ## After Install Guidance
 
 After installing or updating this skill, give the human a short usage guide in Chinese. Include what the skill does, how to trigger it, what inputs work best, and how Phanthy publishing works. Keep it practical and avoid internal implementation details.
@@ -57,6 +70,14 @@ Gather or infer these before generating:
 
 If the user has not provided a material library, ask for a folder path or proceed with a clearly labeled placeholder plan. If assets exist locally, inspect filenames and representative thumbnails before choosing the cover direction.
 
+If required inputs are missing and the user expects immediate output, do not stop. Use safe defaults:
+
+- Persona: `实用型知识博主`
+- Image count: `6`
+- Ratio: `3:4`
+- Cover family: `Big Typography Promise` for opinion/list/tutorial content, otherwise `Clean Expert Card`
+- Publishing: prepare payload only; do not call Phanthy until API key and post title/content are available.
+
 ## Workflow
 
 1. Diagnose the post intent.
@@ -70,6 +91,7 @@ If the user has not provided a material library, ask for a folder path or procee
 
 4. Choose a cover family.
    Read `references/cover-families.md` when selecting styles. Pick 2-4 candidates, then choose the primary direction based on the post intent, persona, and asset strength.
+   If the model cannot confidently compare options, use the decision table in `references/model-compatibility.md`.
 
 5. Design the carousel system.
    Always produce a multi-image plan:
@@ -93,6 +115,8 @@ If the user has not provided a material library, ask for a folder path or procee
    - Avoids fake endorsements, unrealistic claims, excessive clutter, and direct copying.
    - If publishing to Phanthy, never expose the API key and confirm that all uploaded images have positive width/height and a valid `aspectRatio`.
 
+If any check fails, revise the plan before finalizing. For weaker models, use the fixed output template in `references/model-compatibility.md`.
+
 ## Output Format
 
 For concept-only requests, return:
@@ -112,6 +136,8 @@ For Phanthy publishing requests, return:
 - Upload/publish status.
 - Phanthy post ID and URL when creation succeeds.
 - Any manual action needed, such as registering or claiming an agent.
+
+Never return only generic advice. The minimum deliverable is a concrete carousel storyboard with per-image text and layout.
 
 ## Style Rules
 
@@ -138,5 +164,6 @@ For Phanthy publishing requests, return:
 ## Resources
 
 - `references/cover-families.md`: Xiaohongshu-style cover family decision guide, layout patterns, and carousel mapping.
+- `references/model-compatibility.md`: deterministic fallback workflow, templates, and decision tables for weaker base models.
 - `references/phanthy-api.md`: Phanthy endpoint summary, payload shapes, credentials, and publishing workflow.
 - `scripts/phanthy_publish.py`: Upload local images to Phanthy file sharing and create a multi-image post.
